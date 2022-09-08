@@ -1,7 +1,12 @@
 import React from "react";
+import { defaultDifficulty, Difficulty } from "../constants";
 
-const Navigation = ({ length, difficulty, onChangeDifficulty }) => {
-  const upVisibilty = difficulty < 5 ? "" : "is-hidden";
+const Navigation = ({
+  length,
+  difficulty = defaultDifficulty, //初期難易度に3を格納
+  onChangeDifficulty,
+}) => {
+  const upVisibilty = difficulty < Difficulty.length ? "" : "is-hidden"; //難易度数だけ変更が可能に
   const downVisibilty = difficulty > 1 ? "" : "is-hidden";
   const onUpDifficulty = () => onChangeDifficulty(difficulty + 1);
   const onDownDifficulty = () => onChangeDifficulty(difficulty - 1);
@@ -37,3 +42,5 @@ const Navigation = ({ length, difficulty, onChangeDifficulty }) => {
 };
 
 export default Navigation;
+
+//マジックナンバーを避ける設計を行うと保守性の高いプログラムを書くことができる

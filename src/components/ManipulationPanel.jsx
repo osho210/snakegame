@@ -1,4 +1,5 @@
 import React from "react";
+import { Direction } from "../constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -9,16 +10,16 @@ import {
 
 const ManipulationPanel = ({ onChange }) => {
   const onUp = () => {
-    onChange("up");
+    onChange(Direction.up);
   };
   const onRigth = () => {
-    onChange("right");
+    onChange(Direction.right);
   };
   const onLeft = () => {
-    onChange("left");
+    onChange(Direction.left);
   };
   const onDown = () => {
-    onChange("down");
+    onChange(Direction.down);
   };
 
   return (

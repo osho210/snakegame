@@ -4,57 +4,19 @@ import Field from "./components/Field";
 import ManipulationPanel from "./components/ManipulationPanel";
 import Navigation from "./components/Navigation";
 import { initFileds, getFoodPosition } from "./utils";
-
-//最初の基準位置
-const initalPosition = { x: 17, y: 17 };
-//スネークの位置取得(第1引数がフィル―ドサイズ、第2引数がスネークの位置)
-const initiaValues = initFileds(35, initalPosition);
-//初期移動速度
-const defaultInterval = 100;
-//初期難易度
-const defaultDifficulty = 3;
-const Difficulty = [1000, 500, 100, 50, 10];
-
-//play状態のstatus
-const GameStatus = Object.freeze({
-  //オブジェクトの凍結(変更不可の固定)保守性の向上に一役
-  init: "init",
-  playing: "playing",
-  suspended: "suspended",
-  gameover: "gameover",
-});
-
-//snakeの方向
-const Direction = Object.freeze({
-  up: "up",
-  right: "right",
-  left: "left",
-  down: "down",
-});
-
-//反対方向のマッピング(自分食べの防止)
-const OppositeDirection = Object.freeze({
-  up: "down",
-  left: "right",
-  right: "left",
-  douwn: "up",
-});
-
-//座標の変化量
-const Delta = Object.freeze({
-  up: { x: 0, y: -1 },
-  down: { x: 0, y: 1 },
-  left: { x: -1, y: 0 },
-  right: { x: 1, y: 0 },
-});
-
-//キーボードの値を取得
-const DirectionKeyCodemap = Object.freeze({
-  37: Direction.left,
-  38: Direction.up,
-  39: Direction.right,
-  40: Direction.down,
-});
+import {
+  fieldSize,
+  initalPosition,
+  initiaValues,
+  defaultInterval,
+  defaultDifficulty,
+  Difficulty,
+  GameStatus,
+  Direction,
+  OppositeDirection,
+  Delta,
+  DirectionKeyCodemap,
+} from "./constants";
 
 let timer = undefined;
 
@@ -118,7 +80,7 @@ function App() {
     setDirection(Direction.up); //この処理で方向を変更(今回は上方向への移動)
     setStatus(GameStatus.init); //playingなどのゲームの状況を初期化
     setBody([initalPosition]); //スネークのポジションを中央に戻す
-    setFields(initFileds(35, initalPosition)); //スネークの位置情報を取得
+    setFields(initFileds(fieldSize, initalPosition)); //スネークの位置情報を取得
   };
 
   //方向変換のための変数 onClickで関数の呼び出し、オブジェクトの変更を実施する
