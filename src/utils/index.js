@@ -28,3 +28,19 @@ export const initFileds = (fieldSize, snake) => {
   //戻り値でスネークの位置を返却
   return fields;
 };
+
+//壁への衝突判定
+export const isCollision = (fieldSize, position) => {
+  if (position.x < 0 || position.y < 0) {
+    return true;
+  }
+  if (position.x > fieldSize - 1 || position.y > fieldSize - 1) {
+    return true;
+  }
+  return false;
+};
+
+//自分を食べた場合の処理
+export const isEatingMyself = (fields, position) => {
+  return fields[position.y][position.x] === "snake"; //tureが返却される
+};
