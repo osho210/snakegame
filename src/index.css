@@ -7,11 +7,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.title-container{
+  border-radius: 4px 4px 0px 0px;
+  box-shadow: 0px 4px 1px 1px #97a5a5,0px 6px 1px 1px #3C4A4A,0px 0px 1px 1px #3C4A4A;
+}
+
+.title{
+  margin: 0;
+  padding: 8px;
+  font-size: 1.1rem;
+}
+
 /* borderを含めた幅で要素の幅が計算されるように */
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+}
+
+/* visibiltyは領域はあるが要素は表示されない display:noneは領域も要素も表示されない */
+.is-hidden{
+  visibility: hidden !important;
 }
 
 /* 要素が真ん中によるようにフレックスボックスを設定 */
@@ -34,6 +50,12 @@ body {
 .field{
   display: flex;
   flex-wrap: wrap;
+  margin-top: 2px;
+  color: white;
+  background: #0f1d1d;
+  border-radius: 0 0 4px 4px;
+  border: 1px solid #ffffff30;
+  box-shadow: 0px 4px 1px 1px #0c1818 ,0px 6px 1px 1px #060F0D;
 }
 
 /* スネーク */
@@ -43,4 +65,158 @@ body {
 
 .food{
   background: pink;
+}
+
+.navigation{
+  display: flex;
+  margin-top: 4px;
+  justify-content: space-evenly;
+  color: white;
+  font-weight: bold;
+  background: #020705;
+  box-shadow: 0px 4px 1px 1px #020604, 0px 6px 1px 1px #010403;
+  border: 1px solid #ffffff30;
+}
+
+.navigation-item{
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+
+/* none */
+.difficulty-number{
+  margin-right: 8px;
+}
+
+/* none */
+.difficulty-button{
+  cursor: pointer;
+  width: 8px;
+  height: 8px;
+  border: 8px solid #0f1d1d;
+  margin: 8px;
+}
+
+.difficulty-button-container{
+  background: #0f1d1d;
+}
+
+/* noen */
+.difficulty-up{
+  margin-top: 4px;
+  border-bottom: 8px solid #f0f0f050;
+  transition: all ease .5s;
+}
+
+.difficulty-down{
+  margin-bottom: 4px;
+  border-top: 8px solid #f0f0f050;
+  transition: all ease .5s;
+}
+
+.difficulty-up:hover {
+  transform: scale(1.1);
+  border-bottom: 8px solid white;
+}
+
+
+.difficulty-up:active{
+  transform: scale(.8);
+  opacity: .8;
+}
+
+.difficulty-down:active{
+  transform:scale(.8);
+  opacity: .8;
+}
+
+
+/* btnのcss */
+.btn{
+  border: 0;
+  cursor: pointer;
+  color: white;
+  border-radius: 4px;
+  width: 100%;
+  font-weight: bold;
+  padding: 8px 16px;
+  font-size: 1rem;
+  text-transform: uppercase; /* すべての文字を大文字に変換する */
+  transition: all ease .2s;
+  /* margin: 20px ; */
+}
+
+.btn-init,
+.btn-suspended{
+  box-shadow: 0px 4px 1px 1px #199A4B , 0px 6px 1px 1px #0B5420;
+  background-color: #23CE68;
+}
+.btn-playing{
+  box-shadow: 0px 4px 1px 1px #d4a752 , 0px 6px 1px 1px #956933;
+  background-color: #ffd166;
+}
+.btn-gameover{
+  box-shadow: 0px 4px 1px 1px #ce3959 , 0px 6px 1px 1px #8b1c2c;
+  background-color: #ef476f;
+}
+.btn:focus{
+  outline: 0;
+}
+
+/* アニメーションの処理 */
+.btn:active{
+  box-shadow: 0px 0px 0px 0px;
+  transform: translateY(6px);
+}
+
+.btn-init:active,
+.btn-suspended:active{
+  background: #20bd60;
+}
+
+.btn-playing:active{
+  background: #eabc5c;
+}
+
+.btn-gameover:active{
+  background: #de4064;
+}
+
+/* 操作用のボタン */
+.manipulation-panel{
+  margin-top: 2px;
+  display: flex;
+  justify-content: center;
+}
+
+.manipulation-btn{
+  min-width: 106px;
+  margin: 4px 2px;
+  background: #52B4E8;
+  box-shadow: 0px 4px 1px 1px #4293c4 ,0px 6px 1px 1px #21507B;
+}
+
+.btn-move:active{
+  background: #4293c4;
+}
+
+.btn-left,
+.btn-right{
+  min-width: 106px;
+  width: 106px;
+}
+
+.btn-left{
+  margin-left: 0;
+}
+
+.btn-right{
+  margin-right: 0;
+}
+
+.btn-up,
+.btn-down{
+  margin-left: 0px;
+  margin-right: 0px;
 }

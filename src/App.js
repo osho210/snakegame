@@ -9,7 +9,11 @@ import { initFileds, getFoodPosition } from "./utils";
 const initalPosition = { x: 17, y: 17 };
 //スネークの位置取得(第1引数がフィル―ドサイズ、第2引数がスネークの位置)
 const initiaValues = initFileds(35, initalPosition);
+//初期移動速度
 const defaultInterval = 100;
+//初期難易度
+const defaultDifficulty = 3;
+const Difficulty = [1000, 500, 100, 50, 10];
 
 //play状態のstatus
 const GameStatus = Object.freeze({
@@ -20,6 +24,7 @@ const GameStatus = Object.freeze({
   gameover: "gameover",
 });
 
+//snakeの方向
 const Direction = Object.freeze({
   up: "up",
   right: "right",
@@ -27,7 +32,7 @@ const Direction = Object.freeze({
   down: "down",
 });
 
-//反対方向のマッピング(-上下 / 左右)の重複をなくす(自分食べの防止)
+//反対方向のマッピング(自分食べの防止)
 const OppositeDirection = Object.freeze({
   up: "down",
   left: "right",
@@ -69,22 +74,19 @@ function App() {
   const [tick, setTick] = useState(0); //画面描写(描写のためのstate)
   const [status, setStatus] = useState(GameStatus.init); //画面のプレー状態(初期は表示)
   const [direction, setDirection] = useState(Direction.up); //画面の方向の初期化
+  const [difficulty, setDifficulty] = useState(defaultDifficulty);
 
   //スネーク位置の初期化(初期値は中央)
   useEffect(() => {
     setBody([initalPosition]);
-
-    // サンプルデータ
-    setBody(
-      new Array(15).fill("").map((_item, index) => ({ x: 17, y: 17 + index }))
-    );
-
+    //難易度が変更されるたびに実行される
+    const interval = Difficulty[difficulty - 1];
     timer = setInterval(() => {
       //useEffectをrenderの度に使用するための関数
       setTick((tick) => tick + 1);
-    }, defaultInterval);
+    }, interval);
     return unsubscribe;
-  }, []);
+  }, [difficulty]);
 
   useEffect(() => {
     //positionが未定義 || statusがplaying出ない場合返却
@@ -99,17 +101,24 @@ function App() {
   }, [tick]);
 
   const onStart = () => {
+    //status状態のprops処理の実行
     setStatus(GameStatus.playing);
   };
 
+  //onStop関数が実行されていない
+  const onStop = () => {
+    setStatus(GameStatus.suspended);
+  };
+
   const onRestart = () => {
+    //難易度に応じて画面遷移時間の変更
     timer = setInterval(() => {
-      setTick((tick) => tick + 1, defaultInterval);
-      setDirection(Direction.up); //この処理で方向を変更(今回は上方向への移動)
-      setStatus(GameStatus.init); //playingなどのゲームの状況を初期化
-      setBody([initalPosition]); //スネークのポジションを中央に戻す
-      setFields(initFileds(35, initalPosition)); //スネークの位置情報を取得
-    });
+      setTick((tick) => tick + 1);
+    }, defaultInterval);
+    setDirection(Direction.up); //この処理で方向を変更(今回は上方向への移動)
+    setStatus(GameStatus.init); //playingなどのゲームの状況を初期化
+    setBody([initalPosition]); //スネークのポジションを中央に戻す
+    setFields(initFileds(35, initalPosition)); //スネークの位置情報を取得
   };
 
   //方向変換のための変数 onClickで関数の呼び出し、オブジェクトの変更を実施する
@@ -130,6 +139,21 @@ function App() {
     [direction, status]
   );
 
+  //難易度の変更・
+  const onChangeDifficulty = useCallback(
+    (difficulty) => {
+      if (status != GameStatus.init) {
+        return;
+      }
+      if (difficulty < 1 || difficulty > difficulty.length) {
+        return;
+      }
+      setDifficulty(difficulty);
+    },
+    //難易度・プレイ状態が変更された場合に処理が実行される
+    [status, difficulty]
+  );
+
   //keyboardの値を取得
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -140,7 +164,6 @@ function App() {
       onChangeDirection(newDirection);
     };
     document.addEventListener("keydown", handleKeyDown);
-    console.log(body);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onChangeDirection]);
 
@@ -169,7 +192,6 @@ function App() {
       return false;
     }
 
-    // 配列は参照型なので直接変更するとエラーが発生する恐れがある(破壊的メソッド)
     const newBody = [...body];
     //foodのフィールドでない場合末尾のsnakeを削除する
     if (fields[newPosition.y][newPosition.x] !== "food") {
@@ -209,15 +231,25 @@ function App() {
           <h1 className="title">snake Game</h1>
         </div>
         {/* ナビゲーションを表示 */}
-        <Navigation />
+        <Navigation
+          length={body.length}
+          difficulty={difficulty}
+          onChangeDifficulty={onChangeDifficulty}
+        />
+        {/* length={length} difficulty={difficulty}  */}
       </header>
       <main className="main">
         {/* 捜査結果が表示される画面 */}
         <Field fields={fields} />
       </main>
       <footer className="footer">
-        {/* 難易度設定のボタン */}
-        <Button status={status} onStart={onStart} onRestart={onRestart} />
+        {/* buttonにpropsを渡してあげる */}
+        <Button
+          status={status}
+          onStart={onStart}
+          onStop={onStop}
+          onRestart={onRestart}
+        />
         {/* 操作用ボタン */}
         <ManipulationPanel onChange={onChangeDirection} />
       </footer>
