@@ -34,6 +34,7 @@ const unsubscribe = () => {
   clearInterval(timer);
 };
 
+//snakeGameというカスタムフックをAppで利用する
 const useSnakeGame = () => {
   const [fields, setFields] = useState(initiaValues);
   const [body, setBody] = useState([]);
@@ -175,11 +176,14 @@ const useSnakeGame = () => {
     return true;
   };
 
+  //export先の出力するカスタムフック
   return {
+    //stateの値
     body,
     difficulty,
     fields,
     status,
+    //hooksの関数
     start,
     stop,
     reload,
@@ -189,3 +193,9 @@ const useSnakeGame = () => {
 };
 
 export default useSnakeGame;
+
+
+//useState -> stateの状態を管理するフック
+//useEffect -> 引数のstateが変更されたらコールバックの実行
+//useCallback -> 配列で渡されたstateが変更された際に再評価を行って関数を再生成
+//useMemo -> stateが変更されない場合同じ値を使い回す
